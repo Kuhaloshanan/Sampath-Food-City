@@ -327,9 +327,9 @@ public class User_monthly_sales extends javax.swing.JFrame {
 
     private void btn_back_to_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_back_to_bar12ActionPerformed
         // TODO add your handling code here:
-        User_Dashboard UDashb = new User_Dashboard();
+        User_Dashboard UDash = new User_Dashboard();
         this.dispose();
-        UDashb.setVisible(true);
+        UDash.setVisible(true);
     }//GEN-LAST:event_btn_back_to_bar12ActionPerformed
 
     private void btn_best_selling_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_best_selling_bar12ActionPerformed

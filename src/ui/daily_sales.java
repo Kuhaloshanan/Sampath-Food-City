@@ -292,8 +292,7 @@ public class daily_sales extends javax.swing.JFrame {
 
     private void btn_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_checkActionPerformed
         daily(date, jTable1, daily_sales_txtfld);
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Clears all rows in the table
+        
     }//GEN-LAST:event_btn_checkActionPerformed
 
     private void btn_sales_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sales_bar12ActionPerformed
@@ -342,6 +341,8 @@ public class daily_sales extends javax.swing.JFrame {
         // TODO add your handling code here:
         date.setDate(null);       // Clear the date field
         daily_sales_txtfld.setText("");   // Clear the daily sales text field
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
 
   public void daily(JDateChooser date, JTable jTable1, JTextField daily_sales_txtfld) {

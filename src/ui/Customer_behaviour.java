@@ -266,8 +266,7 @@ public class Customer_behaviour extends javax.swing.JFrame {
         // If the customer ID is valid, call the customer method with the customer ID and table reference
         Customer_behaviour behavior = new Customer_behaviour();
         behavior.customer(customer_id_txtfld, customerBehaviorTable);  // Passing customerId and table to fetch data
-        DefaultTableModel model = (DefaultTableModel) customerBehaviorTable.getModel();
-        model.setRowCount(0); // Clears all rows in the table
+        
     }//GEN-LAST:event_btn_checkActionPerformed
 
     private void btn_back_to_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_back_to_bar12ActionPerformed
@@ -309,6 +308,8 @@ public class Customer_behaviour extends javax.swing.JFrame {
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
         // TODO add your handling code here:
         customer_id_txtfld.setText("");  // Clear customer ID text field
+        DefaultTableModel model = (DefaultTableModel) customerBehaviorTable.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public void customer(JTextField customer_id_txtfld, JTable customerBehaviorTable) {
