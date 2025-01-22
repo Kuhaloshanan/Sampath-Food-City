@@ -180,6 +180,11 @@ public class User_product_performance extends javax.swing.JFrame {
         jPanel1.add(top_performing_txtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 130, 180, -1));
 
         btn_clear.setText("Clear");
+        btn_clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clearActionPerformed(evt);
+            }
+        });
         jPanel1.add(btn_clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 170, 80, -1));
 
         btn_check.setText("Check");
@@ -279,9 +284,15 @@ public class User_product_performance extends javax.swing.JFrame {
         this.dispose();
         usbp.setVisible(true);
     }//GEN-LAST:event_btn_branch_performance_bar12ActionPerformed
-    
+
+    private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
+        // TODO add your handling code here:
+        top_performing_txtf.setText("");
+        best_sales_region_txtf.setText("");
+    }//GEN-LAST:event_btn_clearActionPerformed
+
     public class productperformanceuser extends product_performance {
-        
+
         public void productperfom(JTextField top_performing_txtf, JTable jTable1, JTextField best_sales_region_txtf) {
             int topPerformingValue = Integer.parseInt(top_performing_txtf.getText());
             super.productPerformance(topPerformingValue, jTable1, best_sales_region_txtf);

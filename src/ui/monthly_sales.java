@@ -360,68 +360,83 @@ public class monthly_sales extends javax.swing.JFrame {
         // TODO add your handling code here:
         date_start.setDate(null); // Clear the start date field
         date_end.setDate(null);   // Clear the end date field
+        monthly_sales_txtfld.setText("");
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public void monthly(JDateChooser date_start, JDateChooser date_end, JTable jTable1, JTextField monthly_sales_txtfld) {
-        try {
-            // Ensure both date pickers are initialized
-            if (date_start == null || date_end == null) {
-                JOptionPane.showMessageDialog(null, "Date pickers are not initialized.");
-                return;
-            }
+    try {
+        // Ensure date pickers are initialized and contain valid dates
+        if (date_start == null || date_end == null) {
+            JOptionPane.showMessageDialog(null, "Date pickers are not initialized.");
+            return;
+        }
 
-            // Convert dates from JDateChooser
-            java.util.Date selectedStartDate = date_start.getDate();
-            java.util.Date selectedEndDate = date_end.getDate();
+        java.util.Date selectedStartDate = date_start.getDate();
+        java.util.Date selectedEndDate = date_end.getDate();
 
-            if (selectedStartDate == null || selectedEndDate == null) {
-                JOptionPane.showMessageDialog(null, "Please select both start and end dates.");
-                return;
-            }
+        if (selectedStartDate == null || selectedEndDate == null) {
+            JOptionPane.showMessageDialog(null, "Please select both start and end dates.");
+            return;
+        }
 
-            // Convert java.util.Date to java.sql.Date
-            java.sql.Date sqlStartDate = new java.sql.Date(selectedStartDate.getTime());
-            java.sql.Date sqlEndDate = new java.sql.Date(selectedEndDate.getTime());
+        // Ensure start date is not after end date
+        if (selectedStartDate.after(selectedEndDate)) {
+            JOptionPane.showMessageDialog(null, "Start date cannot be after end date.");
+            return;
+        }
 
-            // Database query to fetch monthly sales data between the selected date range
-            String query = "SELECT product_name, quantity, price_per_unit, (quantity * price_per_unit) AS total_sold "
-                    + "FROM items WHERE date BETWEEN ? AND ?";
+        // Convert java.util.Date to java.sql.Date
+        java.sql.Date sqlStartDate = new java.sql.Date(selectedStartDate.getTime());
+        java.sql.Date sqlEndDate = new java.sql.Date(selectedEndDate.getTime());
 
-            try (Connection con = database.getConnection(); PreparedStatement stmt = con.prepareStatement(query)) {
+        // Query to fetch monthly sales data within the selected date range
+        String query = "SELECT product_name, quantity, price_per_unit, (quantity * price_per_unit) AS total_sold "
+                     + "FROM items WHERE date BETWEEN ? AND ?";
 
-                // Bind the start and end date parameters to the query
-                stmt.setDate(1, sqlStartDate);
-                stmt.setDate(2, sqlEndDate);
+        try (Connection con = database.getConnection(); 
+             PreparedStatement stmt = con.prepareStatement(query)) {
 
-                try (ResultSet rs = stmt.executeQuery()) {
-                    // Define table model with the correct column names
-                    DefaultTableModel model = new DefaultTableModel(new String[]{"Product Name", "Quantity", "Unit Price", "Total Sold"}, 0);
-                    jTable1.setModel(model);
+            // Bind parameters to query
+            stmt.setDate(1, sqlStartDate);
+            stmt.setDate(2, sqlEndDate);
 
-                    double overallTotal = 0;
+            try (ResultSet rs = stmt.executeQuery()) {
+                // Define table model with column headers
+                DefaultTableModel model = new DefaultTableModel(new String[]{"Product Name", "Quantity", "Unit Price", "Total Sold"}, 0);
+                jTable1.setModel(model);
 
-                    // Process ResultSet and populate the table
-                    while (rs.next()) {
-                        String productName = rs.getString("product_name");
-                        int quantity = rs.getInt("quantity");
-                        double pricePerUnit = rs.getDouble("price_per_unit");
-                        double totalSold = rs.getDouble("total_sold");
+                double overallTotal = 0.0;
 
-                        // Add data to table model
-                        model.addRow(new Object[]{productName, quantity, pricePerUnit, totalSold});
+                // Process query results and populate the table
+                while (rs.next()) {
+                    String productName = rs.getString("product_name");
+                    int quantity = rs.getInt("quantity");
+                    double pricePerUnit = rs.getDouble("price_per_unit");
+                    double totalSold = rs.getDouble("total_sold");
 
-                        // Update the overall total
-                        overallTotal += totalSold;
-                    }
+                    // Add row to table model
+                    model.addRow(new Object[]{productName, quantity, pricePerUnit, totalSold});
 
-                    // Set the overall total in the monthly sales text field
-                    monthly_sales_txtfld.setText(String.format("%.2f", overallTotal));  // Display the total in the text field
+                    // Accumulate total sales
+                    overallTotal += totalSold;
+                }
+
+                // Update the total sales in the text field
+                monthly_sales_txtfld.setText(String.format("%.2f", overallTotal));
+
+                // Check if no records were found
+                if (model.getRowCount() == 0) {
+                    JOptionPane.showMessageDialog(null, "No sales records found for the selected date range.");
                 }
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Database error: " + ex.getMessage());
         }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Database error: " + ex.getMessage());
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + ex.getMessage());
     }
+}
+
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

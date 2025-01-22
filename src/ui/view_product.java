@@ -4,6 +4,16 @@
  */
 package ui;
 
+import code.produts;
+import db.database;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  *
  * @author rkuha
@@ -15,6 +25,62 @@ public class view_product extends javax.swing.JFrame {
      */
     public view_product() {
         initComponents();
+        datadisplay();
+    }
+    
+    public void datadisplay() {
+        // List to store Product objects
+        List<produts> productList = new ArrayList<>();
+
+        // Database query
+        String query = "SELECT customer_id, product_id, product_name, quantity, price_per_unit, date, total_price, region FROM items";
+
+        try (Connection con = database.getConnection(); Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+
+            // Populate the Product list
+            while (rs.next()) {
+                produts p = new produts();
+                p.setCutomerid(rs.getInt("customer_id"));
+                p.setProductid(rs.getInt("product_id"));
+                p.setProductname(rs.getString("product_name"));
+                p.setQty(rs.getInt("quantity"));
+                p.setPriceperunit(rs.getDouble("price_per_unit"));
+                p.setTotal(rs.getDouble("total_price"));
+                p.setRegion(rs.getString("region"));
+
+                // Get the date from the database and set it
+                Date date = rs.getDate("date"); // Assuming date is of type DATE in database
+                p.setDate(date); // Set the date in the Product object
+
+                productList.add(p);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();  // Print full stack trace for debugging
+        }
+
+        // Convert the Product list to a 2D array
+        Object[][] dataArray = new Object[productList.size()][8];
+        for (int i = 0; i < productList.size(); i++) {
+            produts p = productList.get(i);
+            dataArray[i][0] = p.getCutomerid();
+            dataArray[i][1] = p.getProductid();
+            dataArray[i][2] = p.getProductname();
+            dataArray[i][3] = p.getQty();
+            dataArray[i][4] = p.getPriceperunit();
+
+            // Convert Date to String (if necessary)
+            dataArray[i][5] = p.getDate() != null ? p.getDate().toString() : ""; // Handle null dates
+            dataArray[i][6] = p.getTotal();
+            dataArray[i][7] = p.getRegion();
+        }
+
+        // Column names for JTable
+        String[] columns = {"Customer ID", "Product ID", "Product Name", "Quantity", "Price per Unit", "Date", "Total Price", "Region"};
+
+        // Update the jTable1 with the data
+        javax.swing.table.DefaultTableModel tableModel = new javax.swing.table.DefaultTableModel(dataArray, columns);
+        view_details.setModel(tableModel);
     }
 
     /**
@@ -40,7 +106,7 @@ public class view_product extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         btn_sales_bar6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        view_details = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -181,7 +247,7 @@ public class view_product extends javax.swing.JFrame {
                     .addContainerGap(526, Short.MAX_VALUE)))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        view_details.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -189,7 +255,7 @@ public class view_product extends javax.swing.JFrame {
                 "Transaction ID", "Customer ID", "Product ID", "Product Name", "Quantity", "Price per Unit", "Date", "Total Price", "Region"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(view_details);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -245,10 +311,10 @@ public class view_product extends javax.swing.JFrame {
 
     private void btn_sales_bar5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sales_bar5ActionPerformed
         // TODO add your handling code here:
-       view_product vp = new view_product();
+        view_product vp = new view_product();
         this.dispose();
         vp.setVisible(true);
-        
+
     }//GEN-LAST:event_btn_sales_bar5ActionPerformed
 
     private void btn_product_performance_bar5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_product_performance_bar5ActionPerformed
@@ -268,7 +334,7 @@ public class view_product extends javax.swing.JFrame {
 
     private void btn_best_selling_bar5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_best_selling_bar5ActionPerformed
         // TODO add your handling code here:
-         User_Best_selling_product ubsp = new User_Best_selling_product();
+        User_Best_selling_product ubsp = new User_Best_selling_product();
         this.dispose();
         ubsp.setVisible(true);
     }//GEN-LAST:event_btn_best_selling_bar5ActionPerformed
@@ -294,6 +360,9 @@ public class view_product extends javax.swing.JFrame {
         usbp.setVisible(true);
     }//GEN-LAST:event_btn_branch_performance_bar5ActionPerformed
 
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -345,6 +414,6 @@ public class view_product extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable view_details;
     // End of variables declaration//GEN-END:variables
 }

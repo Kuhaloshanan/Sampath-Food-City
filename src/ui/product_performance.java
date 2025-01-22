@@ -194,7 +194,7 @@ public class product_performance extends javax.swing.JFrame {
                 btn_clearActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 170, 80, -1));
+        jPanel1.add(btn_clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 180, 80, -1));
 
         btn_check.setText("Check");
         btn_check.addActionListener(new java.awt.event.ActionListener() {
@@ -202,7 +202,7 @@ public class product_performance extends javax.swing.JFrame {
                 btn_checkActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_check, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 130, 80, -1));
+        jPanel1.add(btn_check, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 140, 80, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -311,6 +311,9 @@ public class product_performance extends javax.swing.JFrame {
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
         // TODO add your handling code here:
+        product_id.setText("");
+        best_sales_region_txtf.setText("");
+        
     }//GEN-LAST:event_btn_clearActionPerformed
     public void productPerformance(int productId, JTable table, javax.swing.JTextField best_sales_region_txtf) {
         

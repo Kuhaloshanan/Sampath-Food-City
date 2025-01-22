@@ -289,7 +289,7 @@ public class User_Customer_behaviour extends javax.swing.JFrame {
 
         public void Customer(JTextField customer_id_txtfld, JTable customerBehaviorTable) {
             int customer = Integer.parseInt(customer_id_txtfld.getText());
-            super.customer(customer, customerBehaviorTable);
+            super.customer(customer_id_txtfld, customerBehaviorTable);
         }
     }
     
