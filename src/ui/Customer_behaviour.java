@@ -244,28 +244,30 @@ public class Customer_behaviour extends javax.swing.JFrame {
 
     private void btn_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_checkActionPerformed
         // TODO add your handling code here:
-        
+
         // Get the customer ID from the text field
-    String customerIdText = customer_id_txtfld.getText().trim();
+        String customerIdText = customer_id_txtfld.getText().trim();
 
-    // Validate if the customer ID is empty
-    if (customerIdText.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Please enter a valid Customer ID!", "Error", JOptionPane.ERROR_MESSAGE);
-        return;  // Exit the action, no further processing
-    }
+        // Validate if the customer ID is empty
+        if (customerIdText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid Customer ID!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;  // Exit the action, no further processing
+        }
 
-    // Try parsing the customer ID (ensure it's a valid integer)
-    int customerId;
-    try {
-        customerId = Integer.parseInt(customerIdText);  // Try to convert the text to an integer
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(null, "Customer ID must be a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
-        return;  // Exit the action, no further processing
-    }
+        // Try parsing the customer ID (ensure it's a valid integer)
+        int customerId;
+        try {
+            customerId = Integer.parseInt(customerIdText);  // Try to convert the text to an integer
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Customer ID must be a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;  // Exit the action, no further processing
+        }
 
-    // If the customer ID is valid, call the customer method with the customer ID and table reference
-    Customer_behaviour behavior = new Customer_behaviour();
-    behavior.customer(customer_id_txtfld, customerBehaviorTable);  // Passing customerId and table to fetch data
+        // If the customer ID is valid, call the customer method with the customer ID and table reference
+        Customer_behaviour behavior = new Customer_behaviour();
+        behavior.customer(customer_id_txtfld, customerBehaviorTable);  // Passing customerId and table to fetch data
+        DefaultTableModel model = (DefaultTableModel) customerBehaviorTable.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_checkActionPerformed
 
     private void btn_back_to_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_back_to_bar12ActionPerformed
@@ -278,14 +280,14 @@ public class Customer_behaviour extends javax.swing.JFrame {
 
     private void btn_best_selling_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_best_selling_bar12ActionPerformed
         // TODO add your handling code here:
-         Best_selling_product bp = new Best_selling_product();
+        Best_selling_product bp = new Best_selling_product();
         this.dispose();
         bp.setVisible(true);
     }//GEN-LAST:event_btn_best_selling_bar12ActionPerformed
 
     private void btn_customer_behaviour_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_customer_behaviour_bar12ActionPerformed
         // TODO add your handling code here:
-         Customer_behaviour cb = new Customer_behaviour();
+        Customer_behaviour cb = new Customer_behaviour();
         this.dispose();
         cb.setVisible(true);
     }//GEN-LAST:event_btn_customer_behaviour_bar12ActionPerformed
@@ -308,85 +310,83 @@ public class Customer_behaviour extends javax.swing.JFrame {
         // TODO add your handling code here:
         customer_id_txtfld.setText("");  // Clear customer ID text field
     }//GEN-LAST:event_btn_clearActionPerformed
- 
- public void customer(JTextField customer_id_txtfld, JTable customerBehaviorTable) {
-    Connection con = null;
-    PreparedStatement pst = null;
-    ResultSet rs = null;
 
-    try {
-        // Get the customer ID from the text field
-        String customerIdText = customer_id_txtfld.getText().trim();
+    public void customer(JTextField customer_id_txtfld, JTable customerBehaviorTable) {
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
-        // Validate customerIdField input (check if empty)
-        if (customerIdText.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please enter a valid Customer ID!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int customerId;
         try {
-            // Parse the customerId from the text field
-            customerId = Integer.parseInt(customerIdText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Customer ID must be a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            // Get the customer ID from the text field
+            String customerIdText = customer_id_txtfld.getText().trim();
 
-        // Establish the connection
-        con = database.getConnection(); // Ensure database.getConnection() is valid
-        
-        // Query to fetch customer behavior data and calculate total_spent dynamically
-        String query = "SELECT product_name, region, (quantity * price_per_unit) AS total_spent "
-                     + "FROM items WHERE customer_id = ?";
-        pst = con.prepareStatement(query);
-        pst.setInt(1, customerId);
-        rs = pst.executeQuery();
-
-        // Table model
-        DefaultTableModel model = (DefaultTableModel) customerBehaviorTable.getModel();
-        model.setRowCount(0); // Clear the table
-
-        // If no records found, show an informational message
-        boolean recordsFound = false;
-
-        // Loop through the result set
-        while (rs.next()) {
-            String productName = rs.getString("product_name");
-            String region = rs.getString("region");
-            double totalSpent = rs.getDouble("total_spent");
-
-            // Add the data to the table
-            model.addRow(new Object[]{productName, region, totalSpent});
-            recordsFound = true;  // Mark that records have been found
-        }
-
-        if (!recordsFound) {
-            JOptionPane.showMessageDialog(null, "No records found for customer ID " + customerId, "Info", JOptionPane.INFORMATION_MESSAGE);
-        }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "An error occurred while fetching customer data.", "Error", JOptionPane.ERROR_MESSAGE);
-    } finally {
-        // Close resources
-        try {
-            if (rs != null) {
-                rs.close();
+            // Validate customerIdField input (check if empty)
+            if (customerIdText.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter a valid Customer ID!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-            if (pst != null) {
-                pst.close();
+
+            int customerId;
+            try {
+                // Parse the customerId from the text field
+                customerId = Integer.parseInt(customerIdText);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Customer ID must be a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-            if (con != null) {
-                con.close();
+
+            // Establish the connection
+            con = database.getConnection(); // Ensure database.getConnection() is valid
+
+            // Query to fetch customer behavior data and calculate total_spent dynamically
+            String query = "SELECT product_name, region, (quantity * price_per_unit) AS total_spent "
+                    + "FROM items WHERE customer_id = ?";
+            pst = con.prepareStatement(query);
+            pst.setInt(1, customerId);
+            rs = pst.executeQuery();
+
+            // Table model
+            DefaultTableModel model = (DefaultTableModel) customerBehaviorTable.getModel();
+            model.setRowCount(0); // Clear the table
+
+            // If no records found, show an informational message
+            boolean recordsFound = false;
+
+            // Loop through the result set
+            while (rs.next()) {
+                String productName = rs.getString("product_name");
+                String region = rs.getString("region");
+                double totalSpent = rs.getDouble("total_spent");
+
+                // Add the data to the table
+                model.addRow(new Object[]{productName, region, totalSpent});
+                recordsFound = true;  // Mark that records have been found
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+            if (!recordsFound) {
+                JOptionPane.showMessageDialog(null, "No records found for customer ID " + customerId, "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "An error occurred while fetching customer data.", "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Close resources
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
-}
-
-
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

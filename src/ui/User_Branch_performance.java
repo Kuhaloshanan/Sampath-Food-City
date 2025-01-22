@@ -6,6 +6,7 @@ package ui;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -291,6 +292,8 @@ public class User_Branch_performance extends javax.swing.JFrame {
         // TODO add your handling code here:
         enter_region_txtf.setText("");  // Clear enter region text field
         total_amount_txtf.setText(""); // Clear total amount text field
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public class BranchSalesPerformance extends Branch_performance {

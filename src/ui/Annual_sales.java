@@ -348,6 +348,8 @@ public class Annual_sales extends javax.swing.JFrame {
         // TODO add your handling code here:
         annual_sales_txtfld.setText("");
         year_fld.setText("");
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public void Annual(JTextField yearField, JTextField annualSalesField, JTable table) {

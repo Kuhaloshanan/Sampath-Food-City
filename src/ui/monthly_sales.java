@@ -361,6 +361,8 @@ public class monthly_sales extends javax.swing.JFrame {
         date_start.setDate(null); // Clear the start date field
         date_end.setDate(null);   // Clear the end date field
         monthly_sales_txtfld.setText("");
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public void monthly(JDateChooser date_start, JDateChooser date_end, JTable jTable1, JTextField monthly_sales_txtfld) {

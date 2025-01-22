@@ -6,6 +6,7 @@ package ui;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -283,6 +284,8 @@ public class User_Customer_behaviour extends javax.swing.JFrame {
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
         // TODO add your handling code here:
         customer_id_txtfld.setText("");  // Clear customer ID text field
+        DefaultTableModel model = (DefaultTableModel) customerBehaviorTable.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public class customerbeahviour extends Customer_behaviour {

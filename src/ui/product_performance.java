@@ -313,7 +313,8 @@ public class product_performance extends javax.swing.JFrame {
         // TODO add your handling code here:
         product_id.setText("");
         best_sales_region_txtf.setText("");
-        
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
     public void productPerformance(int productId, JTable table, javax.swing.JTextField best_sales_region_txtf) {
         

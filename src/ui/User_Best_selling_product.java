@@ -7,6 +7,7 @@ package ui;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 
 
@@ -330,6 +331,8 @@ public class User_Best_selling_product extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         date_fld.setDate(null);
+        DefaultTableModel model = (DefaultTableModel) best_selling_product_tbl.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public class bestsellingproduct extends Best_selling_product {

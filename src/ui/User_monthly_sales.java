@@ -7,6 +7,7 @@ package ui;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JMonthChooser;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -357,6 +358,8 @@ public class User_monthly_sales extends javax.swing.JFrame {
         date_start.setDate(null); // Clear the start date field
         date_end.setDate(null);   // Clear the end date field
         monthly_sales_txtfld.setText("");
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public class monthlysales extends monthly_sales {

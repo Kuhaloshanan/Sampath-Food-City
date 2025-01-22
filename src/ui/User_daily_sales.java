@@ -7,6 +7,7 @@ package ui;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -346,6 +347,8 @@ public class User_daily_sales extends javax.swing.JFrame {
         // TODO add your handling code here:
         jDateChooser1.setDate(null);       // Clear the date field
         daily_sales_txtfld.setText("");   // Clear the daily sales text field
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Clears all rows in the table
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public class dailysales extends daily_sales {
