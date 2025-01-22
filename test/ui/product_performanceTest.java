@@ -1,43 +1,86 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
 package ui;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 
-/**
- *
- * @author rkuha
- */
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class product_performanceTest {
-    
-    public product_performanceTest() {
-    }
-    
+
+    private product_performance instance;  // Replace with your actual class name
+    private JTable table;
+    private JTextField bestSalesRegionField;
+
     @Before
     public void setUp() {
+        instance = new product_performance(); // Initialize the test class correctly
+        table = new JTable(); // Simulate the JTable
+        bestSalesRegionField = new JTextField(); // Simulate the JTextField
     }
-    
+
     @After
     public void tearDown() {
+        instance = null;
+        table = null;
+        bestSalesRegionField = null;
     }
 
     /**
-     * Test of productPerformance method, of class product_performance.
+     * Test valid product ID (integer)
      */
     @Test
-    public void testProductPerformance() {
+    public void testValidProductId() throws SQLException {
+        int validProductId = 103; // Valid product ID input
+
+        // Call the productPerformance method with valid input
+        instance.productPerformance(validProductId, table, bestSalesRegionField);
+
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+        // Assert that the table contains rows (at least one product)
+        assertTrue("The table should contain at least one row for a valid product ID", model.getRowCount() > 0);
+        // Assert that the best sales region field is populated
+        assertTrue("The best sales region field should be populated", bestSalesRegionField.getText().length() > 0);
     }
 
     /**
-     * Test of main method, of class product_performance.
+     * Test invalid product ID (non-existent product)
      */
     @Test
-    public void testMain() {
+    public void testInvalidProductId() throws SQLException {
+        int invalidProductId = 1000; // Invalid product ID input
+
+        // Call the productPerformance method with an invalid product ID
+        instance.productPerformance(invalidProductId, table, bestSalesRegionField);
+
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+        // Assert that the table contains no rows (invalid ID should result in no data)
+        assertEquals("The table should contain no rows for an invalid product ID", 0, model.getRowCount());
+        // Assert that the best sales region field is empty for invalid product ID
+        assertEquals("The best sales region field should be empty for invalid product ID", "", bestSalesRegionField.getText());
     }
-    
+
+    /**
+     * Test empty product ID (empty input)
+     */
+    @Test
+    public void testEmptyProductId() throws SQLException {
+        int  emptyProductId = 0; 
+
+        // Call the productPerformance method with an empty product ID
+        instance.productPerformance(emptyProductId, table, bestSalesRegionField);
+
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+        // Assert that the table contains no rows for an empty product ID
+        assertEquals("The table should contain no rows for an empty product ID", 0, model.getRowCount());
+        // Assert that the best sales region field is empty for an empty product ID
+        assertEquals("The best sales region field should be empty for an empty product ID", "", bestSalesRegionField.getText());
+    }
 }

@@ -228,7 +228,7 @@ public class login extends javax.swing.JFrame {
         }
 
         try {
-            String query = "SELECT * FROM register WHERE email=? and password=? and user_type=?";
+            String query = "SELECT * FROM register WHERE user_name=? and password=? and user_type=?";
             Connection con = database.getConnection();
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, username);
@@ -239,7 +239,7 @@ public class login extends javax.swing.JFrame {
             if (rs.next()) {
                 String dbUserType = rs.getString("user_type"); // Get the user type from the database
 
-                JOptionPane.showMessageDialog(null, "Email and password matched. You are logged in as " + dbUserType);
+                JOptionPane.showMessageDialog(null, "Usename and password matched. You are logged in as " + dbUserType);
 
                 if (dbUserType.equalsIgnoreCase("admin")) { // Case-insensitive comparison
                     Dashboard dashbaord = new Dashboard();
@@ -253,7 +253,7 @@ public class login extends javax.swing.JFrame {
                 }
                 return "invalid user type";  // Return invalid user type
             } else {
-                JOptionPane.showMessageDialog(null, "Email and Password do not match.");
+                JOptionPane.showMessageDialog(null, "Username and Password do not match.");
 
                 return "invalid credentials";  // Return invalid credentials
             }

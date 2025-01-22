@@ -342,62 +342,73 @@ public class daily_sales extends javax.swing.JFrame {
         daily_sales_txtfld.setText("");   // Clear the daily sales text field
     }//GEN-LAST:event_btn_clearActionPerformed
 
-    public void daily(JDateChooser date, JTable jTable1, JTextField daily_sales_txtfld) {
-        try {
-            // Ensure date is properly defined JDateChooser object
-            if (date == null) {
-                JOptionPane.showMessageDialog(null, "Date picker is not initialized.");
-                return;
-            }
+  public void daily(JDateChooser date, JTable jTable1, JTextField daily_sales_txtfld) {
+    try {
+        // Ensure date is properly defined JDateChooser object
+        if (date == null) {
+            JOptionPane.showMessageDialog(null, "Date picker is not initialized.");
+            return;
+        }
 
-            // Convert date from JDateChooser
-            java.util.Date selectedDate = date.getDate();  // Corrected to 'date.getDate()'
-            if (selectedDate == null) {
-                JOptionPane.showMessageDialog(null, "Please select a date.");
-                return;
-            }
+        // Convert date from JDateChooser
+        java.util.Date selectedDate = date.getDate();  // Corrected to 'date.getDate()'
+        if (selectedDate == null) {
+            JOptionPane.showMessageDialog(null, "Please select a date.");
+            return;
+        }
 
-            // Convert java.util.Date to java.sql.Date
-            java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
+        // Convert java.util.Date to java.sql.Date
+        java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
 
-            // Database query to fetch daily sales data
-            String query = "SELECT product_name, quantity, price_per_unit, (quantity * price_per_unit) AS total_sold "
-                    + "FROM items WHERE date = ?";
+        // Database query to fetch daily sales data
+        String query = "SELECT product_name, quantity, price_per_unit, (quantity * price_per_unit) AS total_sold "
+                + "FROM items WHERE date = ?";
 
-            try (Connection con = database.getConnection(); PreparedStatement stmt = con.prepareStatement(query)) {
+        try (Connection con = database.getConnection(); PreparedStatement stmt = con.prepareStatement(query)) {
 
-                // Bind the date parameter to the query
-                stmt.setDate(1, sqlDate);
+            // Bind the date parameter to the query
+            stmt.setDate(1, sqlDate);
 
-                try (ResultSet rs = stmt.executeQuery()) {
-                    // Define table model with the correct column names
-                    DefaultTableModel model = new DefaultTableModel(new String[]{"Product Name", "Quantity", "Unit Price", "Total Sold"}, 0);
-                    jTable1.setModel(model);
+            try (ResultSet rs = stmt.executeQuery()) {
+                // Define table model with the correct column names
+                DefaultTableModel model = new DefaultTableModel(new String[]{"Product Name", "Quantity", "Unit Price", "Total Sold"}, 0);
+                jTable1.setModel(model);
 
-                    double overallTotal = 0;
+                double overallTotal = 0;
+                boolean dataFound = false;  // Flag to check if there is any data for the selected date
 
-                    // Process ResultSet and populate the table using encapsulation
-                    while (rs.next()) {
-                        String productName = rs.getString("product_name");
-                        int quantity = rs.getInt("quantity");
-                        double pricePerUnit = rs.getDouble("price_per_unit");
-                        double totalSold = rs.getDouble("total_sold");
+                // Process ResultSet and populate the table using encapsulation
+                while (rs.next()) {
+                    String productName = rs.getString("product_name");
+                    int quantity = rs.getInt("quantity");
+                    double pricePerUnit = rs.getDouble("price_per_unit");
+                    double totalSold = rs.getDouble("total_sold");
 
-                        // Add data to table model
-                        model.addRow(new Object[]{productName, quantity, pricePerUnit, totalSold});
+                    // Add data to table model
+                    model.addRow(new Object[]{productName, quantity, pricePerUnit, totalSold});
 
-                        // Update the overall total
-                        overallTotal += totalSold;
-                    }
+                    // Update the overall total
+                    overallTotal += totalSold;
 
+                    dataFound = true;  // Data found for the selected date
+                }
+
+                // If no data found for the selected date, show a message and clear the text field
+                if (!dataFound) {
+                    JOptionPane.showMessageDialog(null, "No products found for the selected date.");
+                    daily_sales_txtfld.setText("");  // Clear the text field if no data is found
+                } else {
                     // Set the overall total in the daily sales text field
                     daily_sales_txtfld.setText(String.format("%.2f", overallTotal));  // Corrected line
                 }
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Database error: " + ex.getMessage());
         }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Database error: " + ex.getMessage());
     }
+}
+
+
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

@@ -295,6 +295,7 @@ public class Branch_performance extends javax.swing.JFrame {
         // TODO add your handling code here:
         enter_region_txtf.setText("");  // Clear enter region text field
         total_amount_txtf.setText(""); // Clear total amount text field
+        
     }//GEN-LAST:event_btn_clearActionPerformed
 
     public void branch(String branchName, JTable table, javax.swing.JTextField totalAmountField) {

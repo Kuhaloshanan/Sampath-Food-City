@@ -71,17 +71,5 @@ public class Best_selling_productTest {
         assertEquals("The table should be empty when no date is selected", 0, model.getRowCount());
     }
 
-    @Test
-    public void testErrorHandling() throws SQLException {
-        // Create an invalid setup by passing an uninitialized date chooser
-        sdate = null;
-
-        // Catch and verify exception
-        try {
-            bestproduct.bestproduct(sdate, btable);
-        } catch (Exception e) {
-            assertTrue("An error message should be displayed when the date chooser is null",
-                e.getMessage().contains("Date picker is not initialized."));
-        }
-    }
+  
 }

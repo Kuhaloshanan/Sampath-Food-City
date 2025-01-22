@@ -344,7 +344,7 @@ public class Best_selling_product extends javax.swing.JFrame {
     try {
         // Ensure sdate is properly defined JDateChooser object
         if (sdate == null) {
-            JOptionPane.showMessageDialog(null, "Date picker is not initialized.");
+            JOptionPane.showMessageDialog(null, "Date picker is not initialized.");      
             return;
         }
 

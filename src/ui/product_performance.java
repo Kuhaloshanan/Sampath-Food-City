@@ -189,6 +189,11 @@ public class product_performance extends javax.swing.JFrame {
         jPanel1.add(product_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 140, 180, -1));
 
         btn_clear.setText("Clear");
+        btn_clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clearActionPerformed(evt);
+            }
+        });
         jPanel1.add(btn_clear, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 170, 80, -1));
 
         btn_check.setText("Check");
@@ -243,18 +248,29 @@ public class product_performance extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_sales_bar12ActionPerformed
 
     private void btn_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_checkActionPerformed
-         // Get the product ID from the input field
-        int productId = Integer.parseInt(product_id.getText().trim());
+// Get the product ID from the input field
+        String productIdInput = product_id.getText().trim(); // Replace 'product_id' with your JTextField variable name
 
-        // Reference to your JTable and best sales region text field
+        if (productIdInput.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Please enter the product ID.");
+            return; // Exit if the input is empty
+        }
+
+
+
+// Parse the product ID
+        int productId = Integer.parseInt(productIdInput);
+
+// Reference to your JTable and best sales region text field
         JTable table = jTable1; // Replace 'jTable1' with your JTable variable name
         javax.swing.JTextField bestSalesRegionField = best_sales_region_txtf; // Replace with your JTextField variable name
 
-        // Create an instance of the class containing the productPerformance method
-        product_performance instance = new product_performance(); // Replace 'YourClassName' with your actual class name
+// Create an instance of the class containing the productPerformance method
+        product_performance instance = new product_performance(); // Replace 'product_performance' with your actual class name
 
-        // Call the productPerformance method
+// Call the productPerformance method
         instance.productPerformance(productId, table, bestSalesRegionField);
+
     }//GEN-LAST:event_btn_checkActionPerformed
 
     private void btn_back_to_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_back_to_bar12ActionPerformed
@@ -292,76 +308,90 @@ public class product_performance extends javax.swing.JFrame {
         this.dispose();
         brp.setVisible(true);
     }//GEN-LAST:event_btn_branch_performance_bar12ActionPerformed
+
+    private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_clearActionPerformed
     public void productPerformance(int productId, JTable table, javax.swing.JTextField best_sales_region_txtf) {
-    Connection con = null;
-    PreparedStatement pst = null;
-    ResultSet rs = null;
+        
+      
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
-    try {
-        // Establish the connection
-        con = database.getConnection();
-        if (con == null) {
-            System.out.println("Database connection failed.");
-            return;
-        }
-
-        // Query to fetch data from the database
-        String query = "SELECT product_name, region, SUM(quantity) AS quantity_sold, SUM(quantity * price_per_unit) AS total_sales " +
-                       "FROM items WHERE product_id = ? GROUP BY product_name, region ORDER BY total_sales DESC";
-        pst = con.prepareStatement(query);
-        pst.setInt(1, productId);
-        rs = pst.executeQuery();
-
-        // Table model
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.setRowCount(0); // Clear the table
-
-        String bestRegion = null;
-        double maxSales = 0;
-
-        // Loop through the result set
-        while (rs.next()) {
-            String productName = rs.getString("product_name");
-            String region = rs.getString("region");
-            int quantitySold = rs.getInt("quantity_sold");
-            double totalSales = rs.getDouble("total_sales");
-
-            // Update the best region if this region has higher sales
-            if (totalSales > maxSales) {
-                maxSales = totalSales;
-                bestRegion = region;
-            }
-
-            // Add only product name, quantity sold, and total sales to the table
-            model.addRow(new Object[]{productName, quantitySold, totalSales});
-        }
-
-        // Display the best sales region in the text field
-        if (bestRegion != null) {
-            best_sales_region_txtf.setText(bestRegion);
-        } else {
-            best_sales_region_txtf.setText("No sales data found");
-        }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
         try {
-            if (rs != null) {
-                rs.close();
+            // Establish the connection
+            con = database.getConnection();
+            if (con == null) {
+                System.out.println("Database connection failed.");
+                return;
             }
-            if (pst != null) {
-                pst.close();
+
+            // Query to fetch data from the database
+            String query = "SELECT product_name, region, SUM(quantity) AS quantity_sold, SUM(quantity * price_per_unit) AS total_sales "
+                    + "FROM items WHERE product_id = ? GROUP BY product_name, region ORDER BY total_sales DESC";
+            pst = con.prepareStatement(query);
+            pst.setInt(1, productId);
+            rs = pst.executeQuery();
+
+            // Table model
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0); // Clear the table
+
+            String bestRegion = null;
+            double maxSales = 0;
+            boolean dataFound = false;
+
+            // Loop through the result set
+            while (rs.next()) {
+                dataFound = true;
+                String productName = rs.getString("product_name");
+                String region = rs.getString("region");
+                int quantitySold = rs.getInt("quantity_sold");
+                double totalSales = rs.getDouble("total_sales");
+
+                // Update the best region if this region has higher sales
+                if (totalSales > maxSales) {
+                    maxSales = totalSales;
+                    bestRegion = region;
+                }
+
+                // Add only product name, quantity sold, and total sales to the table
+                model.addRow(new Object[]{productName, quantitySold, totalSales});
             }
-            if (con != null) {
-                con.close();
+
+            // Display message using JOptionPane based on the result
+            if (dataFound) {
+                if (bestRegion != null) {
+                    best_sales_region_txtf.setText(bestRegion); // Optional: Update text field with best region
+                }
+            } else {
+                // Display message with JOptionPane when no data is found
+                JOptionPane.showMessageDialog(null, "No data found for the given ID", "No Data Found", JOptionPane.INFORMATION_MESSAGE);
+                // Clear the table if no data is found
+                model.setRowCount(0);
+                // Optionally clear the text field as well
+                best_sales_region_txtf.setText("");
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
-}
-
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
