@@ -243,7 +243,7 @@ public class User_Customer_behaviour extends javax.swing.JFrame {
     private void btn_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_checkActionPerformed
         // TODO add your handling code here:
         customerbeahviour customer = new customerbeahviour();
-        customer.Customer(customer_id_txtfld, customerBehaviorTable);
+        customer.customer(customer_id_txtfld, customerBehaviorTable);
     }//GEN-LAST:event_btn_checkActionPerformed
 
     private void btn_back_to_bar12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_back_to_bar12ActionPerformed

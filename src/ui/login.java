@@ -239,7 +239,7 @@ public class login extends javax.swing.JFrame {
             if (rs.next()) {
                 String dbUserType = rs.getString("user_type"); // Get the user type from the database
 
-                JOptionPane.showMessageDialog(null, "Usename and password matched. You are logged in as " + dbUserType);
+                JOptionPane.showMessageDialog(null, "Success, You are logged in as " + dbUserType);
 
                 if (dbUserType.equalsIgnoreCase("admin")) { // Case-insensitive comparison
                     Dashboard dashbaord = new Dashboard();
@@ -253,7 +253,7 @@ public class login extends javax.swing.JFrame {
                 }
                 return "invalid user type";  // Return invalid user type
             } else {
-                JOptionPane.showMessageDialog(null, "Username and Password do not match.");
+                JOptionPane.showMessageDialog(null, "Username or Password is Incorrect.");
 
                 return "invalid credentials";  // Return invalid credentials
             }

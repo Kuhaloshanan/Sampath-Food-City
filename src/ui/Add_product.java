@@ -677,7 +677,7 @@ if (selectedIndex != -1) {
                 JOptionPane.showMessageDialog(null, "Error parsing date: " + e.getMessage());
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Unexpected date format.");
+            JOptionPane.showMessageDialog(null, "Invalid date format.");
         }
     } else {
         date.setDate(null); // Clear the date picker if the date is null
@@ -695,7 +695,7 @@ if (selectedIndex != -1) {
             // Get the selected row
             int selectedRow = item_details.getSelectedRow(); // Replace 'tblProducts' with your JTable variable name
             if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(null, "Please select a row to delete.");
+                JOptionPane.showMessageDialog(null, "Please select the row delete.");
                 return;
             }
 
@@ -704,7 +704,7 @@ if (selectedIndex != -1) {
             String productID = item_details.getValueAt(selectedRow, 1).toString(); // Column 1 as example
 
             // Confirm deletion
-            int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this record?");
+            int confirm = JOptionPane.showConfirmDialog(null, "DO you want to countinue, delete this Details?");
             if (confirm != JOptionPane.YES_OPTION) {
                 return;
             }
@@ -722,7 +722,7 @@ if (selectedIndex != -1) {
             model.removeRow(selectedRow);
 
             // Success message
-            JOptionPane.showMessageDialog(null, "Record deleted successfully!");
+            JOptionPane.showMessageDialog(null, "Details deleted successfully!");
 
             // Close connections
             pst.close();
@@ -762,7 +762,7 @@ if (selectedIndex != -1) {
 
                 int rowsInserted = pstmt.executeUpdate();
                 if (rowsInserted > 0) {
-                    JOptionPane.showMessageDialog(null, "Record successfully added!");
+                    JOptionPane.showMessageDialog(null, "Details successfully added!");
 
                     // Add the new record to the JTable
                     model.addRow(new Object[]{
@@ -776,7 +776,7 @@ if (selectedIndex != -1) {
                         branch // region
                     });
                 } else {
-                    JOptionPane.showMessageDialog(null, "No record was inserted.");
+                    JOptionPane.showMessageDialog(null, "No Details was inserted.");
                 }
             }
         } catch (SQLException e) {

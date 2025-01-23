@@ -353,7 +353,7 @@ public class Best_selling_product extends javax.swing.JFrame {
         // Convert date from JDateChooser
         java.util.Date selectedDate = sdate.getDate();
         if (selectedDate == null) {
-            JOptionPane.showMessageDialog(null, "Please select a date.");
+            JOptionPane.showMessageDialog(null, "Please select a  date.");
             return;
         }
 
